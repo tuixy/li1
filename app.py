@@ -96,5 +96,5 @@ def redirect_to_original(short_code):
         return "Lien non trouvé", 404
 
 if __name__ == '__main__':
-    # Lance le serveur Flask en mode débogage pour le développement
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))  # Utilise le port de Render ou 5000 en local
+    app.run(host='0.0.0.0', port=port)
