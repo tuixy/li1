@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title if title else "Redirection en cours..." }}</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #121212; /* Dark background */
+            margin: 0;
+            color: #e0e0e0; /* Light text */
+            text-align: center;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1); /* Translucent background */
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 45px;
+            max-width: 600px;
+            width: 100%;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        h1 {
+            color: #bb86fc;
+            margin-bottom: 15px;
+            font-size: 2em;
+        }
+
+        p {
+            color: #d0d0d0;
+            margin-bottom: 25px;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .countdown {
+            font-size: 1.5em;
+            color: #4caf50; /* Green for countdown */
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .redirect-button {
+            background-color: #bb86fc;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            text-decoration: none; /* Pour le lien */
+            display: inline-block; /* Pour le centrer */
+            margin-top: 15px;
+        }
+
+        .redirect-button:hover {
+            background-color: #9c27b0;
+            transform: translateY(-1px);
+        }
+
+        /* Loading spinner */
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #bb86fc;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        {% if title %}
+            <h1>{{ title }}</h1>
+        {% else %}
+            <h1>Redirection de lien</h1>
+        {% endif %}
+
+        {% if description %}
+            <p>{{ description }}</p>
+        {% else %}
+            <p>Vous allez être redirigé vers le contenu que vous avez demandé.</p>
+        {% endif %}
+
+        <div class="countdown">Redirection dans <span id="countdownDisplay">5</span> secondes...</div>
+        <div class="spinner"></div>
+
+        <a href="{{ original_url }}" class="redirect-button">Rediriger maintenant</a>
+    </div>
+
+    <script>
+        const originalUrl = "{{ original_url }}";
+        const countdownDisplay = document.getElementById('countdownDisplay');
+        let countdown = 5; // Temps en secondes avant la redirection
+
+        const interval = setInterval(() => {
+            countdown--;
+            countdownDisplay.textContent = countdown;
+            if (countdown <= 0) {
+                clearInterval(interval);
+                window.location.href = originalUrl; // Effectue la redirection
+            }
+        }, 1000);
+
+        // Au cas où JavaScript serait désactivé ou pour un accès direct
+        document.querySelector('.redirect-button').addEventListener('click', () => {
+            clearInterval(interval); // Arrête le compte à rebours si l'utilisateur clique
+        });
+    </script>
+</body>
+</html>
