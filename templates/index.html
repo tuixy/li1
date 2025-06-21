@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Créer une Redirection Simple (Liquid Glass Dark Mode)</title>
+  <style>
+    /* --- Global Styles --- */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      background: linear-gradient(135deg, #0f0f0f 0%, #1c1c1c 100%);
+      color: #e0e0e0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.05) 0%, transparent 70%);
+      animation: glassFlow 15s infinite ease-in-out;
+      z-index: 0;
+    }
+
+    @keyframes glassFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.07);
+      border-radius: 20px;
+      box-shadow:
+        0 8px 32px 0 rgba(0, 0, 0, 0.37),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px) saturate(180%);
+      -webkit-backdrop-filter: blur(12px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      padding: 50px;
+      max-width: 550px;
+      width: 100%;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .container:hover {
+      transform: scale(1.01);
+      box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.4),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+    }
+
+    h1 {
+      color: #bb86fc;
+      margin-bottom: 15px;
+      font-size: 2.2em;
+    }
+
+    p {
+      color: #d0d0d0;
+      margin-bottom: 30px;
+      font-size: 1.1em;
+    }
+
+    .input-group {
+      margin-bottom: 15px;
+      text-align: left;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #e0e0e0;
+      font-size: 0.95em;
+    }
+
+    .input-group input[type="url"],
+    .input-group input[type="text"],
+    .input-group textarea {
+      width: 100%;
+      padding: 14px 15px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      font-size: 1.1em;
+      outline: none;
+      background-color: rgba(255, 255, 255, 0.08);
+      color: #e0e0e0;
+      transition: border-color 0.3s ease;
+    }
+
+    .input-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .input-group input:focus,
+    .input-group textarea:focus {
+      border-color: #bb86fc;
+      box-shadow: 0 0 0 0.2rem rgba(187, 134, 252, 0.25);
+    }
+
+    .action-section {
+      display: flex;
+      justify-content: center;
+      margin-top: 25px;
+    }
+
+    button {
+      background: linear-gradient(145deg, #bb86fc, #9b59b6);
+      color: white;
+      padding: 14px 25px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1.1em;
+      font-weight: bold;
+      box-shadow: 0 4px 14px rgba(187, 134, 252, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #9c27b0;
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 6px 20px rgba(155, 89, 182, 0.5);
+    }
+
+    .result-section {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.05);
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 25px;
+      word-break: break-word;
+      display: none;
+    }
+
+    .result-section p {
+      margin-bottom: 15px;
+      color: #d0d0d0;
+    }
+
+    #shortenedLink {
+      font-weight: bold;
+      color: #bb86fc;
+      text-decoration: none;
+      font-size: 1.2em;
+      display: block;
+      margin-bottom: 15px;
+    }
+
+    #shortenedLink:hover {
+      text-decoration: underline;
+    }
+
+    #copyButton {
+      background-color: #4caf50;
+    }
+
+    #copyButton:hover {
+      background-color: #388e3c;
+    }
+
+    .message-section {
+      margin-top: 20px;
+      color: #f44336;
+      font-weight: bold;
+      font-size: 1em;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Crée ta page de redirection</h1>
+    <p>Personnalise une page intermédiaire pour ton lien.</p>
+
+    <div class="input-group">
+      <label for="longUrlInput">URL de destination :</label>
+      <input type="url" id="longUrlInput" placeholder="Ex: https://mon-site-web.com/ma-page-finale" required />
+    </div>
+
+    <div class="action-section">
+      <button id="shortenButton">Générer la page de lien</button>
+    </div>
+
+    <div class="result-section" id="resultSection">
+      <p>Ton lien de redirection :</p>
+      <a id="shortenedLink" href="#" target="_blank" rel="noopener noreferrer"></a>
+      <button id="copyButton">Copier le lien</button>
+    </div>
+    <div class="message-section" id="messageSection"></div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const longUrlInput = document.getElementById('longUrlInput');
+      const shortenButton = document.getElementById('shortenButton');
+      const resultSection = document.getElementById('resultSection');
+      const shortenedLink = document.getElementById('shortenedLink');
+      const copyButton = document.getElementById('copyButton');
+      const messageSection = document.getElementById('messageSection');
+
+      shortenButton.addEventListener('click', async () => {
+        const originalUrl = longUrlInput.value.trim();
+
+        messageSection.textContent = '';
+        resultSection.style.display = 'none';
+
+        if (!originalUrl) {
+          messageSection.textContent = 'Veuillez entrer l\'URL de destination.';
+          return;
+        }
+
+        try {
+          new URL(originalUrl);
+        } catch (e) {
+          messageSection.textContent = 'Veuillez entrer une URL valide (ex: https://...).';
+          return;
+        }
+
+        try {
+          const response = await fetch('/shorten', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ original_url: originalUrl })
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            const fullShortUrl = window.location.origin + '/' + data.short_url;
+            shortenedLink.href = fullShortUrl;
+            shortenedLink.textContent = fullShortUrl;
+            resultSection.style.display = 'block';
+          } else {
+            messageSection.textContent = data.error || 'Erreur lors de la création du lien.';
+          }
+        } catch (error) {
+          console.error('Erreur réseau ou du serveur:', error);
+          messageSection.textContent = 'Impossible de se connecter au serveur. Veuillez réessayer.';
+        }
+      });
+
+      copyButton.addEventListener('click', () => {
+        const textToCopy = shortenedLink.textContent;
+        navigator.clipboard.writeText(textToCopy)
+          .then(() => {
+            const originalText = copyButton.textContent;
+            copyButton.textContent = 'Copié !';
+            setTimeout(() => {
+              copyButton.textContent = originalText;
+            }, 1500);
+          })
+          .catch(err => {
+            console.error('Erreur de copie:', err);
+            messageSection.textContent = 'Impossible de copier le lien.';
+          });
+      });
+    });
+  </script>
+</body>
+</html>
